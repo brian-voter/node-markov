@@ -29,18 +29,14 @@ class MarkovMachine {
   getChains() {
     const newChains = {};
 
-    for (let i = 1; i < this.words.length; i++) {
-      const chain = newChains[this.words[i - 1]] || [];
+    for (let i = 0; i < this.words.length; i++) {
+      const chain = newChains[this.words[i]] || [];
 
-      chain.push(this.words[i]);
+      const word = (i < this.words.length - 1) ? this.words[i + 1] : null
+      chain.push(word);
 
-      newChains[this.words[i - 1]] = chain;
+      newChains[this.words[i]] = chain;
     }
-
-    const lastWord = this.words[this.words.length - 1]
-    const chain = newChains[lastWord] || [];
-    chain.push(null);
-    newChains[lastWord] = chain;
 
     return newChains;
   }
