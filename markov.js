@@ -1,5 +1,6 @@
-/** Textual markov chain generator. */
+"use strict"
 
+/** Textual markov chain generator. */
 
 class MarkovMachine {
 
@@ -15,7 +16,7 @@ class MarkovMachine {
   /** Get markov chain: returns object of Markov chains.
    *
    *  For text of "The cat in the hat.", chains will be:
-   * 
+   *
    *  {
    *   "The": ["cat"],
    *   "cat": ["in"],
@@ -23,11 +24,25 @@ class MarkovMachine {
    *   "the": ["hat."],
    *   "hat.": [null],
    *  }
-   * 
+   *
    * */
-
   getChains() {
-    // TODO: implement this!
+    const newChains = {};
+
+    for (let i = 1; i < this.words.length; i++) {
+      const chain = newChains[this.words[i - 1]] || [];
+
+      chain.push(this.words[i]);
+
+      newChains[this.words[i - 1]] = chain;
+    }
+
+    const lastWord = this.words[this.words.length - 1]
+    const chain = newChains[lastWord] || [];
+    chain.push(null);
+    newChains[lastWord] = chain;
+
+    return newChains;
   }
 
 
@@ -35,10 +50,33 @@ class MarkovMachine {
    *  until it hits a null choice. */
 
   getText() {
-    // TODO: implement this!
-
     // - start at the first word in the input text
     // - find a random word from the following-words of that
     // - repeat until reaching the terminal null
+
+    let string = [];
+    let word = this.words[0];
+
+    do {
+      string.push(word);
+
+      const chain =  this.chains[word];
+      word = chain[getRandInt(chain.length)];
+    } while(word != null);
+
+    return string.join(" ");
   }
 }
+
+/**
+ * Gets a random integer from 0 (incl) to max (excl).
+ * @param {number} max
+ * @returns {number}
+ */
+function getRandInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+module.exports = {
+  MarkovMachine,
+};
