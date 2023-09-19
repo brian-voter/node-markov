@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 /** Textual markov chain generator. */
 
@@ -32,7 +32,7 @@ class MarkovMachine {
     for (let i = 0; i < this.words.length; i++) {
       const chain = newChains[this.words[i]] || [];
 
-      const word = (i < this.words.length - 1) ? this.words[i + 1] : null
+      const word = (i < this.words.length - 1) ? this.words[i + 1] : null;
       chain.push(word);
 
       newChains[this.words[i]] = chain;
@@ -56,22 +56,24 @@ class MarkovMachine {
     do {
       string.push(word);
 
-      const chain =  this.chains[word];
-      word = chain[getRandInt(chain.length)];
-    } while(word != null);
-
+      const chain = this.chains[word];
+      word = chain[this.getRandInt(chain.length)];
+    } while (word != null);
+    debugger;
     return string.join(" ");
+  }
+
+  /**
+   * Gets a random integer from 0 (incl) to max (excl).
+   * @param {number} max
+   * @returns {number}
+   */
+  getRandInt(max) {
+    return Math.floor(Math.random() * max);
   }
 }
 
-/**
- * Gets a random integer from 0 (incl) to max (excl).
- * @param {number} max
- * @returns {number}
- */
-function getRandInt(max) {
-  return Math.floor(Math.random() * max);
-}
+
 
 module.exports = {
   MarkovMachine,
